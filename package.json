@@ -1,0 +1,43 @@
+{
+  "name": "c",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.988.0",
+    "bluebird": "^3.7.2",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "ethereumjs-common": "^1.5.2",
+    "express": "^4.17.1",
+    "file-system": "^2.2.2",
+    "jquery-slotmachine": "^4.0.2",
+    "random-number-csprng": "^1.0.2",
+    "short-uuid": "^4.2.0",
+    "solc": "^0.5.17",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.2.6"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.5.0",
+    "nodemon": "^2.0.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaypersanchez/vegascoin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaypersanchez/vegascoin/issues"
+  },
+  "homepage": "https://github.com/jaypersanchez/vegascoin#readme",
+  "keywords": [],
+  "description": ""
+}
