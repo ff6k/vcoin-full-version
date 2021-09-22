@@ -56,6 +56,7 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = "results"
 const TABLE_NAME_OVER_ALL_RESULT = "overAllResults"
+const TABLE_NAME_TOKEN_HOLDERS_RESULT = "tokenHolders"
 let trueRandom = 0;
 
 async function getResults() {
@@ -113,23 +114,33 @@ async function getOverAllResultByDate(date) {
     return results;
 };
 
-async function deleteResultByDate(date) {
+const deleteResult = async(id,count) => {
     const params = {
         TableName: TABLE_NAME,
+        Key:{
+             "id" : id,
+             "count" : count
+        },
+ 
+    };
+    return await dynamoClient.delete(params).promise();
+};
+async function deleteOverAllResult(id) {
+    const params = {
+        TableName: TABLE_NAME_OVER_ALL_RESULT,
         Key: {
-            date,
+            "id" : id,
         }
     };
     return await dynamoClient.delete(params).promise();
 };
-async function deleteOverAllResultByDate(date) {
+
+async function getTokenHolders() {
     const params = {
-        TableName: TABLE_NAME_OVER_ALL_RESULT,
-        Key: {
-            date,
-        }
+        TableName: TABLE_NAME_TOKEN_HOLDERS_RESULT,
     };
-    return await dynamoClient.delete(params).promise();
+    const results = await dynamoClient.scan(params).promise();
+    return results;
 };
 //end of db functions
 
@@ -156,7 +167,7 @@ async function airdrop(recipient, amount) {
         .catch(err => {
             res.status(404).send(err)
         })
-    console.log(airDropResult, 'Air drop Result');
+    // console.log(airDropResult, 'Air drop Result');
     return airDropResult;
 }
 
@@ -412,17 +423,28 @@ app.get('/resetData', async (req, res) => {
     var dateNow = Date.now();
     var today = new Date(dateNow);
     var dateFormatted = today.toDateString();
+    let getResultToday =  await getresultByDate(dateFormatted)
+    let getOverAllResultsByDate = await getOverAllResultByDate(dateFormatted)
+    getResultToday.Items.forEach(async (item) => {
+        console.log(item.id,'ID')
+        await deleteResult(item.id,item.count);
+       
+    });
+    console.log(getOverAllResultsByDate.Items[0]['id']);
+    await deleteOverAllResult(getOverAllResultsByDate.Items[0]['id']);
 
-    await deleteResultByDate(dateFormatted)
-    await deleteOverAllResultByDate(dateFormatted)
 })
+
 app.post('/rouletteAction', async (req, res) => {
+    
+    // console.log(getTokenHoldersResult);
     var dateNow = Date.now();
     var today = new Date(dateNow);
     var dateFormatted = today.toDateString();
-    let getDominantResultsByDate = await getOverAllResultByDate('Wed Sep 15 2021')
-    // var dominantActionType = getDominantResultsByDate.Items[0].dominantAction;
-    var dominantActionType = 2;
+    let getDominantResultsByDate = await getOverAllResultByDate(dateFormatted)
+    // console.log(getDominantResultsByDate);
+    var dominantActionType = getDominantResultsByDate.Items[0].dominantAction;
+    // var dominantActionType = 1;
     var rouletteResultJSON = JSON.parse(Object.keys(req.body));
     var roulleteResult = rouletteResultJSON['rouletteResult'];
     let initialSupply = await contract.methods.totalSupply().call();
@@ -430,24 +452,39 @@ app.post('/rouletteAction', async (req, res) => {
     var amount = Math.floor(initialAmount);
     console.log(initialSupply, "Initial Supply");
     console.log(amount, "Amount");
-
+    
     if (dominantActionType == 1) {
-        let airdropReceipt = await airdrop(process.env.testWalletAddress, amount);
-        console.log(airdropReceipt, "Receipt");
-        res.json(airdropReceipt);
+        let getTokenHoldersResults = await getTokenHolders();
+        getTokenHoldersResults.Items.forEach(async (item) => {
+            let airdropReceipt = await airdrop(item.walletAddress, amount);
+            console.log(airdropReceipt, "Airdrop Receipt");
+            // console.log(item);
+        });
 
     } else if (dominantActionType == 2) {
         let burnReceipt = await burn(amount);
-        console.log(burnReceipt, "Receipt");
+        console.log(burnReceipt, "Burn Receipt");
         res.json(burnReceipt);
 
     } else {
         let mintReceipt = await mint(amount, res);
-        console.log(mintReceipt, "Receipt");
+        console.log(mintReceipt, "Mint Receipt");
         res.json(mintReceipt);
     }
     let totalSupply = await contract.methods.totalSupply().call();
     console.log(totalSupply, "Total Supply");
+
+});
+app.get('/checkDay', async (req, res) => {
+
+    //check day if 7 days 
+    var dateNow = Date.now();
+    var today = new Date(dateNow);
+    var dateFormatted = today.toDateString();
+
+    let getOverAllResultsByDate = await getOverAllResultByDate(dateFormatted)
+    console.log(getOverAllResultsByDate);
+    res.json(getOverAllResultsByDate)
 
 });
 function findDominantAction(numericValues) {
