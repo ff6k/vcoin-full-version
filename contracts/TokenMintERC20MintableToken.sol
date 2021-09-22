@@ -6,6 +6,8 @@
 
 pragma solidity ^0.5.0;
 
+// import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
  * the optional functions; to access them see `ERC20Detailed`.
@@ -509,7 +511,6 @@ contract MinterRole {
 
 pragma solidity ^0.5.0;
 
-//import "https://github.com/smartcontractkit/chainlink/blob/master/contracts/src/v0.8/VRFConsumerBase.sol";
 /**
  * @dev Extension of `ERC20` that adds a set of accounts with the `MinterRole`,
  * which have permission to mint (create) new tokens as they see fit.
@@ -541,10 +542,22 @@ contract ERC20Mintable is ERC20, MinterRole {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function getAirdrop(address recipient, uint256 amount) public onlyMinter returns (bool) {
-        require(balanceOf(address(this))>=amount,"Insuficient balance in contract");
-        _transfer(address(this), recipient, amount);
+    function getAirdrop(address[] memory recipients, uint256 amount) public onlyMinter returns (bool) {
+        require(balanceOf(address(this))>=recipients.length * amount,"Insuficient balance in contract");
+        for (uint i=0; i<recipients.length; i++) {
+            _transfer(address(this), recipients[i], amount);
+        }
         return true;
+    }
+
+    /**
+     *
+     * Requirements:
+     *
+     * - the caller must have the `MinterRole`.
+     */
+    function kill() public onlyMinter returns (bool) {
+        selfdestruct(msg.sender);
     }
 }
 
@@ -562,6 +575,7 @@ pragma solidity ^0.5.0;
  * For full specification of ERC-20 standard see:
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
  */
+
 contract TokenMintERC20MintableToken is ERC20Mintable {
 
     string private _name;
@@ -576,14 +590,13 @@ contract TokenMintERC20MintableToken is ERC20Mintable {
      * @param initialSupply initial supply of tokens in lowest units (depending on decimals)
      * @param tokenOwnerAddress address that gets 100% of token supply
      */
-    constructor(string memory name, string memory symbol, uint256 decimals, uint256 initialSupply, address payable feeReceiver, address tokenOwnerAddress) public payable {
+    constructor(string memory name, string memory symbol, uint256 decimals, uint256 initialSupply, address payable feeReceiver, address tokenOwnerAddress) public payable{
       _name = name;
       _symbol = symbol;
       _decimals = decimals;
-
       // set tokenOwnerAddress as owner of initial supply, more tokens can be minted later
-      uint256 mulValue = 10 ** decimals;
-      _mint(tokenOwnerAddress, initialSupply.mul(mulValue));
+    //   uint256 mulValue = 10 ** decimals;
+      _mint(tokenOwnerAddress, initialSupply);
 
       // pay the service fee for contract deployment
       feeReceiver.transfer(msg.value);
@@ -651,4 +664,5 @@ contract TokenMintERC20MintableToken is ERC20Mintable {
     function decimals() public view returns (uint256) {
       return _decimals;
     }
+
 }
