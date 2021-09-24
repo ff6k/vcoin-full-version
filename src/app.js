@@ -48,11 +48,11 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 //DBFunctions
-AWS.config.update({
-    region: process.env.AWS_DEFAULT_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-})
+// AWS.config.update({
+//     region: process.env.AWS_DEFAULT_REGION,
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+// })
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = "results"
 const TABLE_NAME_OVER_ALL_RESULT = "overAllResults"
