@@ -145,7 +145,7 @@ async function getTokenHolders() {
 //end of db functions
 
 //slotActions
-async function airdrop(recipient, amount) {
+async function airdrop(recipient, amount,res) {
     const [account] = await web3.eth.getAccounts();
 
     let airDropResult = contract.methods.getAirdrop(recipient, amount).estimateGas({ from: account })
@@ -171,7 +171,7 @@ async function airdrop(recipient, amount) {
     return airDropResult;
 }
 
-async function burn(amount) {
+async function burn(amount,res) {
     const [account] = await web3.eth.getAccounts();
 
     let burnResult = contract.methods.burn(amount)
@@ -456,13 +456,13 @@ app.post('/rouletteAction', async (req, res) => {
     if (dominantActionType == 1) {
         let getTokenHoldersResults = await getTokenHolders();
         getTokenHoldersResults.Items.forEach(async (item) => {
-            let airdropReceipt = await airdrop(item.walletAddress, amount);
+            let airdropReceipt = await airdrop(item.walletAddress, amount,res);
             console.log(airdropReceipt, "Airdrop Receipt");
             // console.log(item);
         });
 
     } else if (dominantActionType == 2) {
-        let burnReceipt = await burn(amount);
+        let burnReceipt = await burn(amount,res);
         console.log(burnReceipt, "Burn Receipt");
         res.json(burnReceipt);
 
