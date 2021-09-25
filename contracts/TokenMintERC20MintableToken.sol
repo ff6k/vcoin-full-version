@@ -1,10 +1,10 @@
 /**
  *Submitted for verification at Etherscan.io on 2021-01-12
-*/
+ */
 
 // File: contracts\open-zeppelin-contracts\token\ERC20\IERC20.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.7;
 
 // import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
@@ -30,7 +30,9 @@ interface IERC20 {
      *
      * Emits a `Transfer` event.
      */
-    function transfer(address recipient, uint256 amount) external returns (bool);
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
 
     /**
      * @dev Returns the remaining number of tokens that `spender` will be
@@ -39,7 +41,10 @@ interface IERC20 {
      *
      * This value changes when `approve` or `transferFrom` are called.
      */
-    function allowance(address owner, address spender) external view returns (uint256);
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -66,7 +71,11 @@ interface IERC20 {
      *
      * Emits a `Transfer` event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -80,12 +89,16 @@ interface IERC20 {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to `approve`. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 }
 
 // File: contracts\open-zeppelin-contracts\math\SafeMath.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.7;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -195,9 +208,7 @@ library SafeMath {
 
 // File: contracts\open-zeppelin-contracts\token\ERC20\ERC20.sol
 
-pragma solidity ^0.5.0;
-
-
+pragma solidity ^0.8.7;
 
 /**
  * @dev Implementation of the `IERC20` interface.
@@ -225,23 +236,23 @@ pragma solidity ^0.5.0;
 contract ERC20 is IERC20 {
     using SafeMath for uint256;
 
-    mapping (address => uint256) private _balances;
+    mapping(address => uint256) private _balances;
 
-    mapping (address => mapping (address => uint256)) public _allowances;
+    mapping(address => mapping(address => uint256)) public _allowances;
 
     uint256 private _totalSupply;
 
     /**
      * @dev See `IERC20.totalSupply`.
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() override public view returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev See `IERC20.balanceOf`.
      */
-    function balanceOf(address account) public view returns (uint256) {
+    function balanceOf(address account) override public view returns (uint256) {
         return _balances[account];
     }
 
@@ -253,7 +264,7 @@ contract ERC20 is IERC20 {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount) public returns (bool) {
+    function transfer(address recipient, uint256 amount) override public returns (bool) {
         _transfer(msg.sender, recipient, amount);
         return true;
     }
@@ -261,7 +272,11 @@ contract ERC20 is IERC20 {
     /**
      * @dev See `IERC20.allowance`.
      */
-    function allowance(address owner, address spender) public view returns (uint256) {
+    function allowance(address owner, address spender) override
+        public
+        view
+        returns (uint256)
+    {
         return _allowances[owner][spender];
     }
 
@@ -272,7 +287,7 @@ contract ERC20 is IERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(address spender, uint256 value) public returns (bool) {
+    function approve(address spender, uint256 value) override public returns (bool) {
         _approve(msg.sender, spender, value);
         return true;
     }
@@ -289,9 +304,17 @@ contract ERC20 is IERC20 {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) override public returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount));
+        _approve(
+            sender,
+            msg.sender,
+            _allowances[sender][msg.sender].sub(amount)
+        );
         return true;
     }
 
@@ -307,8 +330,15 @@ contract ERC20 is IERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-        _approve(msg.sender, spender, _allowances[msg.sender][spender].add(addedValue));
+    function increaseAllowance(address spender, uint256 addedValue)
+        public
+        returns (bool)
+    {
+        _approve(
+            msg.sender,
+            spender,
+            _allowances[msg.sender][spender].add(addedValue)
+        );
         return true;
     }
 
@@ -326,8 +356,15 @@ contract ERC20 is IERC20 {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-        _approve(msg.sender, spender, _allowances[msg.sender][spender].sub(subtractedValue));
+    function decreaseAllowance(address spender, uint256 subtractedValue)
+        public
+        returns (bool)
+    {
+        _approve(
+            msg.sender,
+            spender,
+            _allowances[msg.sender][spender].sub(subtractedValue)
+        );
         return true;
     }
 
@@ -345,7 +382,11 @@ contract ERC20 is IERC20 {
      * - `recipient` cannot be the zero address.
      * - `sender` must have a balance of at least `amount`.
      */
-    function _transfer(address sender, address recipient, uint256 amount) internal {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
@@ -371,7 +412,7 @@ contract ERC20 is IERC20 {
         emit Transfer(address(0), account, amount);
     }
 
-     /**
+    /**
      * @dev Destroys `amount` tokens from `account`, reducing the
      * total supply.
      *
@@ -403,7 +444,11 @@ contract ERC20 is IERC20 {
      * - `owner` cannot be the zero address.
      * - `spender` cannot be the zero address.
      */
-    function _approve(address owner, address spender, uint256 value) internal {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 value
+    ) internal {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 
@@ -419,13 +464,17 @@ contract ERC20 is IERC20 {
      */
     function _burnFrom(address account, uint256 amount) internal {
         _burn(account, amount);
-        _approve(account, msg.sender, _allowances[account][msg.sender].sub(amount));
+        _approve(
+            account,
+            msg.sender,
+            _allowances[account][msg.sender].sub(amount)
+        );
     }
 }
 
 // File: contracts\open-zeppelin-contracts\access\Roles.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.7;
 
 /**
  * @title Roles
@@ -433,7 +482,7 @@ pragma solidity ^0.5.0;
  */
 library Roles {
     struct Role {
-        mapping (address => bool) bearer;
+        mapping(address => bool) bearer;
     }
 
     /**
@@ -456,7 +505,11 @@ library Roles {
      * @dev Check if an account has this role.
      * @return bool
      */
-    function has(Role storage role, address account) internal view returns (bool) {
+    function has(Role storage role, address account)
+        internal
+        view
+        returns (bool)
+    {
         require(account != address(0), "Roles: account is the zero address");
         return role.bearer[account];
     }
@@ -464,8 +517,7 @@ library Roles {
 
 // File: contracts\open-zeppelin-contracts\access\roles\MinterRole.sol
 
-pragma solidity ^0.5.0;
-
+pragma solidity ^0.8.7;
 
 contract MinterRole {
     using Roles for Roles.Role;
@@ -475,12 +527,15 @@ contract MinterRole {
 
     Roles.Role private _minters;
 
-    constructor () internal {
+    constructor(){
         _addMinter(msg.sender);
     }
 
     modifier onlyMinter() {
-        require(isMinter(msg.sender), "MinterRole: caller does not have the Minter role");
+        require(
+            isMinter(msg.sender),
+            "MinterRole: caller does not have the Minter role"
+        );
         _;
     }
 
@@ -509,7 +564,7 @@ contract MinterRole {
 
 // File: contracts\open-zeppelin-contracts\token\ERC20\ERC20Mintable.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.7;
 
 /**
  * @dev Extension of `ERC20` that adds a set of accounts with the `MinterRole`,
@@ -517,8 +572,9 @@ pragma solidity ^0.5.0;
  *
  * At construction, the deployer of the contract is the only minter.
  */
-    
+
 contract ERC20Mintable is ERC20, MinterRole {
+    address payable private owner;
     /**
      * @dev See `ERC20._mint`.
      *
@@ -526,7 +582,11 @@ contract ERC20Mintable is ERC20, MinterRole {
      *
      * - the caller must have the `MinterRole`.
      */
-    function mint(address account, uint256 amount) public onlyMinter returns (bool) {
+    function mint(address account, uint256 amount)
+        public
+        onlyMinter
+        returns (bool)
+    {
         _mint(account, amount);
         return true;
     }
@@ -542,9 +602,16 @@ contract ERC20Mintable is ERC20, MinterRole {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function getAirdrop(address[] memory recipients, uint256 amount) public onlyMinter returns (bool) {
-        require(balanceOf(address(this))>=recipients.length * amount,"Insuficient balance in contract");
-        for (uint i=0; i<recipients.length; i++) {
+    function getAirdrop(address[] memory recipients, uint256 amount)
+        public
+        onlyMinter
+        returns (bool)
+    {
+        require(
+            balanceOf(address(this)) >= recipients.length * amount,
+            "Insuficient balance in contract"
+        );
+        for (uint256 i = 0; i < recipients.length; i++) {
             _transfer(address(this), recipients[i], amount);
         }
         return true;
@@ -556,15 +623,15 @@ contract ERC20Mintable is ERC20, MinterRole {
      *
      * - the caller must have the `MinterRole`.
      */
-    function kill() public onlyMinter returns (bool) {
-        selfdestruct(msg.sender);
+    function kill() public payable onlyMinter returns (bool) {
+        selfdestruct(payable(msg.sender));
+        return true;
     }
 }
 
 // File: contracts\ERC20\TokenMintERC20MintableToken.sol
 
-pragma solidity ^0.5.0;
-
+pragma solidity ^0.8.7;
 
 /**
  * @title TokenMintERC20MintableToken
@@ -577,36 +644,50 @@ pragma solidity ^0.5.0;
  */
 
 contract TokenMintERC20MintableToken is ERC20Mintable {
-
     string private _name;
     string private _symbol;
     uint256 private _decimals;
 
     /**
      * @dev Constructor.
-     * @param name name of the token
-     * @param symbol symbol of the token, 3-4 chars is recommended
-     * @param decimals number of decimal places of one token unit, 18 is widely used
+     * @param name_ name of the token
+     * @param symbol_ symbol of the token, 3-4 chars is recommended
+     * @param decimals_ number of decimal places of one token unit, 18 is widely used
      * @param initialSupply initial supply of tokens in lowest units (depending on decimals)
      * @param tokenOwnerAddress address that gets 100% of token supply
      */
-    constructor(string memory name, string memory symbol, uint256 decimals, uint256 initialSupply, address payable feeReceiver, address tokenOwnerAddress) public payable{
-      _name = name;
-      _symbol = symbol;
-      _decimals = decimals;
-      // set tokenOwnerAddress as owner of initial supply, more tokens can be minted later
-    //   uint256 mulValue = 10 ** decimals;
-      _mint(tokenOwnerAddress, initialSupply);
+    constructor(
+        string memory name_,
+        string memory symbol_,
+        uint256 decimals_,
+        uint256 initialSupply,
+        address payable feeReceiver,
+        address tokenOwnerAddress
+    ) payable {
+        _name = name_;
+        _symbol = symbol_;
+        _decimals = decimals_;
+        // set tokenOwnerAddress as owner of initial supply, more tokens can be minted later
+        //   uint256 mulValue = 10 ** decimals;
+        _mint(tokenOwnerAddress, initialSupply);
 
-      // pay the service fee for contract deployment
-      feeReceiver.transfer(msg.value);
+        // pay the service fee for contract deployment
+        feeReceiver.transfer(msg.value);
     }
 
-    function spinSlotMachine(uint256 decimal) public view returns(uint256 rand0, uint256 rand1, uint256 rand2) {
-            uint256 a = getRandom(decimal);
-            uint256 b = getRandom(decimal);
-            uint256 c = getRandom(decimal);
-            return(a, b, c);
+    function spinSlotMachine(uint256 decimal)
+        public
+        view
+        returns (
+            uint256 rand0,
+            uint256 rand1,
+            uint256 rand2
+        )
+    {
+        uint256 a = getRandom(decimal);
+        uint256 b = getRandom(decimal);
+        uint256 c = getRandom(decimal);
+        return (a, b, c);
     }
 
     function getRandom(uint256 decimal) public view returns (uint256) {
@@ -625,13 +706,12 @@ contract TokenMintERC20MintableToken is ERC20Mintable {
             ) % decimal;
     }
 
-
     /**
      * @dev transfers minter role from msg.sender to newMinter
      */
     function transferMinterRole(address newMinter) public {
-      addMinter(newMinter);
-      renounceMinter();
+        addMinter(newMinter);
+        renounceMinter();
     }
 
     /**
@@ -639,7 +719,7 @@ contract TokenMintERC20MintableToken is ERC20Mintable {
      * @param value The amount of lowest token units to be burned.
      */
     function burn(uint256 value) public {
-      _burn(msg.sender, value);
+        _burn(msg.sender, value);
     }
 
     // optional functions from ERC20 stardard
@@ -648,21 +728,20 @@ contract TokenMintERC20MintableToken is ERC20Mintable {
      * @return the name of the token.
      */
     function name() public view returns (string memory) {
-      return _name;
+        return _name;
     }
 
     /**
      * @return the symbol of the token.
      */
     function symbol() public view returns (string memory) {
-      return _symbol;
+        return _symbol;
     }
 
     /**
      * @return the number of decimals of the token.
      */
     function decimals() public view returns (uint256) {
-      return _decimals;
+        return _decimals;
     }
-
 }
