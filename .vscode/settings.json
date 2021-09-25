@@ -1,3 +1,4 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "mythxvsc.accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MGNlM2IyZS00Y2E0LTQ3YmItOTYwYi04N2IzNjI3NTVmZjYiLCJpYXQiOjE2MzE3NjMxMDEuMjIzLCJpc3MiOiJNeXRoWCBBdXRoIFNlcnZpY2UiLCJleHAiOjE5NDczMzkxMDEuMjIsInVzZXJJZCI6IjYxNDJiOTEzYTZlMTg0MjlkYmM2ZWYzNSJ9.6CXpFQKiL8lj8tkpw7Fk3jDmcjD5jv30fuBIxjWmlrs"
 }
