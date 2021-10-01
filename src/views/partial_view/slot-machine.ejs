@@ -58,7 +58,6 @@
         // alert('CHECK');
         const response = await fetch('/checkDay')
         const results = await response.json();
-        console.log(results['Items'][0]['dominantAction']);
         if (results['Count'] > 0) {
             // console.log('Has Dominant')
             var dominantAction = results['Items'][0]['dominantAction'] == 1 ? 'Air Drop' : results['Items'][0]['dominantAction'] == 2 ? 'Burn' : 'Mint';

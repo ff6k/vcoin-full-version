@@ -756,7 +756,7 @@
         }
         async function reset() {
             const response = await fetch('/resetData')
-
+            location.reload();
             document.getElementById("randomizeButton").disabled = false;
             document.getElementById("actionResult").innerHTML = '';
         }

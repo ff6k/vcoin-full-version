@@ -145,7 +145,7 @@ async function getTokenHolders() {
 //end of db functions
 
 //slotActions
-async function airdrop(recipient, amount,res) {
+async function airdrop(recipient, amount) {
     const [account] = await web3.eth.getAccounts();
 
     let airDropResult = contract.methods.getAirdrop(recipient, amount).estimateGas({ from: account })
@@ -160,12 +160,12 @@ async function airdrop(recipient, amount,res) {
                     return new Promise(resolve => { resolve(result) });
                 })
                 .catch(error => {
-                    res.status(404).send(error)
+                    console.log(error,"ERROR")
                 })
             return airDrop;
         })
         .catch(err => {
-            res.status(404).send(err)
+            console.log(err,"ERR")
         })
     // console.log(airDropResult, 'Air drop Result');
     return airDropResult;
@@ -456,7 +456,7 @@ app.post('/rouletteAction', async (req, res) => {
     if (dominantActionType == 1) {
         let getTokenHoldersResults = await getTokenHolders();
         getTokenHoldersResults.Items.forEach(async (item) => {
-            let airdropReceipt = await airdrop(item.walletAddress, amount,res);
+            let airdropReceipt = await airdrop(item.walletAddress, amount);
             console.log(airdropReceipt, "Airdrop Receipt");
             // console.log(item);
         });
@@ -503,7 +503,3 @@ function findDominantAction(numericValues) {
 
     return maxName;
 }
-
-
-
-
