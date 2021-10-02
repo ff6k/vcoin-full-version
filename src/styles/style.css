@@ -21,9 +21,9 @@ code {
   border-radius: 5px;
 }
 
-/* .well p {
+.well p {
   font-size:
-} */
+}
 
 .btn-group-justified {
   margin: 0 auto;
@@ -35,9 +35,8 @@ h1 {
 }
 
 .container {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 a{
@@ -161,20 +160,13 @@ header a {
   /* background-color: #EB6B56; */
   background-image: linear-gradient(black, rgb(251 189 24));
   border-top: 20px solid black;
-  border-radius: 17px;
+  border-radius: 25px;
 }
-
-#randomize .row {
-  padding-top: 2px;
-  padding-right: 2px;
-  padding-left: 2px;
-}
-
 
 #randomize .row > div.col-sm-4 > div {
-  padding: 8px;
-  width: 120px;
-  height: 120px;
+  padding: 40px;
+  width: 180px;
+  height: 180px;
   background: white;
   border-radius: 50%;
   margin-left: auto;
@@ -184,10 +176,10 @@ header a {
 }
 
 #randomize .row > div.col-xs-4 > div {
-  padding-top: 10px;
-  padding-left: 10px;
-  width: 50px;
-  height: 50px;
+  padding-top: 40px;
+  padding-left: 40px;
+  width: 175px;
+  height: 175px;
   background-color: #fff;
   border-radius: 50%;
   margin: auto;
@@ -213,19 +205,6 @@ header a {
   background: transparent !important;
   font-size: 18px;
   padding: 10px !important;
-}
-
-.card {
-  max-width: 83%;
-  margin: auto;
-  border-width: 3px;
-  border-radius: 17px;
- 
-}
-
-.card-body {
-  padding: 6px;
-  
 }
 
 /*
@@ -358,27 +337,5 @@ footer{
   display: inline-block;
   text-align: left;
 }
-#roulette-card-background {
-  border-bottom: 10px solid rgb(251 189 24);
-  /* background-color: #EB6B56; */
-  background-image: linear-gradient(black, rgb(251 189 24));
-  border-top: 20px solid black;
-  border-radius: 17px;
-  height: 550px;
-  max-width: 900px;
-  margin: 6px;  
-}
-
-#wheelcanvas {
-  height: 400px;
-  width: 400px;
-}
-
-.form-control {
-  width: 400px;
-  height: 40px;
-}
-
-
 
 .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
